@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+    web:
+        build: . 
+        ports:
+          - '10.24.1.17:80:80'
+    db:
+        image: postgres
+
+networks:
+    default:
+        driver: custom-driver-1
