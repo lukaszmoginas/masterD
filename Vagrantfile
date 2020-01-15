@@ -10,8 +10,8 @@ $vm_ip="10.24.0.2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.ssh.username = $user
-  config.ssh.forward_x11 = true
-  config.ssh.shell = "bash"
+	config.ssh.forward_x11 = true
+	config.ssh.shell = "bash"
 
 	config.vm.box = "nfqlt/docker"
 	config.vm.network "private_network", ip: $vm_ip, netmask: "255.255.0.0"
