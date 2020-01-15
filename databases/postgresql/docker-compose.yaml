@@ -1,5 +1,6 @@
-version: '2.1'
+version: '2.4'
 services:
+
   web:
     image: nfqlt/apache24-fastcgi
     ports:
@@ -26,7 +27,7 @@ services:
   postgres:
     image: postgres
     ports:
-      - '10.24.1.17:5555:5432'
+      - '10.24.1.17:5432:5432'
 
   https-dev:
     image: nfqlt/https-dev
@@ -48,7 +49,7 @@ services:
       - '/etc/gitconfig:/etc/gitconfig'
       - '/etc/environment:/etc/environment-vm:ro'
     environment:
-      NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+      NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
 
   linker:
     image: nfqlt/linker18ce
@@ -56,3 +57,10 @@ services:
       - '/run/docker.sock:/run/docker.sock'
 
 volumes: {  }
+
+networks:
+  default:
+    ipam:
+      config:
+        -
+          subnet: 10.24.1.17/28
