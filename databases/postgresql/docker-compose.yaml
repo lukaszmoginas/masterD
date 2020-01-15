@@ -1,12 +1,58 @@
 version: '2.1'
 services:
-    web:
-        build: . 
-        ports:
-          - '10.24.1.17:80:80'
-    db:
-        image: postgres
+  web:
+    image: nfqlt/apache24-fastcgi
+    ports:
+      - '10.24.1.17:80:80'
+    links:
+      - fastcgi
+    volumes:
+      - './src:/home/project/src'
+    environment:
+      APACHE_DOCUMENTROOT: /home/project/src/public
+      NFQ_PROJECT_ROOT: /home/project/src
+      NFQ_ENABLE_APACHE_MODULES: rewrite
 
-networks:
-    default:
-        driver: custom-driver-1
+  fastcgi:
+    image: nfqlt/php72-fpm
+    links:
+      - postgres
+    volumes:
+      - './src:/home/project/src'
+    environment:
+      NFQ_PROJECT_ROOT: /home/project/src
+      NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+
+  postgres:
+    image: postgres
+    ports:
+      - '10.24.1.17:5555:5432'
+
+  https-dev:
+    image: nfqlt/https-dev
+    ports:
+      - '10.24.1.17:443:443'
+    links:
+      - web
+
+  dev:
+    image: nfqlt/php72-dev
+    ports:
+      - '10.24.1.17:22:22'
+    links:
+      - postgres
+    volumes:
+      - './src:/home/project/src'
+      - '/home/project/.ssh:/home/project/.ssh'
+      - '/etc/ssh:/etc/ssh'
+      - '/etc/gitconfig:/etc/gitconfig'
+      - '/etc/environment:/etc/environment-vm:ro'
+    environment:
+      NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+
+  linker:
+    image: nfqlt/linker18ce
+    volumes:
+      - '/run/docker.sock:/run/docker.sock'
+
+volumes: {  }
