@@ -50,6 +50,7 @@ services:
       - '/etc/environment:/etc/environment-vm:ro'
     environment:
       NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+      NFQ_INIT_SCRIPT: src/seedDB.sh
 
   linker:
     image: nfqlt/linker18ce
