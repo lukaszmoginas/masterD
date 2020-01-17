@@ -1,67 +1,68 @@
 version: '2.4'
 services:
 
-  web:
-    image: nfqlt/apache24-fastcgi
-    ports:
-      - '10.24.1.17:80:80'
-    links:
-      - fastcgi
-    volumes:
-      - './src:/home/project/src'
-    environment:
-      APACHE_DOCUMENTROOT: /home/project/src/public
-      NFQ_PROJECT_ROOT: /home/project/src
-      NFQ_ENABLE_APACHE_MODULES: rewrite
+    web:
+        image: nfqlt/apache24-fastcgi
+        ports:
+            - '10.24.1.17:80:80'
+        links:
+            - fastcgi
+        volumes:
+            - './src:/home/project/src'
+        environment:
+            APACHE_DOCUMENTROOT: /home/project/src/public
+            NFQ_PROJECT_ROOT: /home/project/src
+            NFQ_ENABLE_APACHE_MODULES: rewrite
 
-  fastcgi:
-    image: nfqlt/php72-fpm
-    links:
-      - postgres
-    volumes:
-      - './src:/home/project/src'
-    environment:
-      NFQ_PROJECT_ROOT: /home/project/src
-      NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+    fastcgi:
+        image: nfqlt/php72-fpm
+        links:
+            - postgres
+        volumes:
+            - './src:/home/project/src'
+        environment:
+            NFQ_PROJECT_ROOT: /home/project/src
+            NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
 
-  postgres:
-    image: postgres
-    ports:
-      - '10.24.1.17:5432:5432'
+    postgres:
+        image: postgres
+        ports:
+            - '10.24.1.17:5432:5432'
+        volumes:
+            - /var/lib/mysql
 
-  https-dev:
-    image: nfqlt/https-dev
-    ports:
-      - '10.24.1.17:443:443'
-    links:
-      - web
+    https-dev:
+        image: nfqlt/https-dev
+        ports:
+            - '10.24.1.17:443:443'
+        links:
+            - web
 
-  dev:
-    image: nfqlt/php72-dev
-    ports:
-      - '10.24.1.17:22:22'
-    links:
-      - postgres
-    volumes:
-      - './src:/home/project/src'
-      - '/home/project/.ssh:/home/project/.ssh'
-      - '/etc/ssh:/etc/ssh'
-      - '/etc/gitconfig:/etc/gitconfig'
-      - '/etc/environment:/etc/environment-vm:ro'
-    environment:
-      NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
-      NFQ_INIT_SCRIPT: src/seedDB.sh
+    dev:
+        image: nfqlt/php72-dev
+        ports:
+            - '10.24.1.17:22:22'
+        links:
+            - postgres
+        volumes:
+            - './src:/home/project/src'
+            - '/home/project/.ssh:/home/project/.ssh'
+            - '/etc/ssh:/etc/ssh'
+            - '/etc/gitconfig:/etc/gitconfig'
+            - '/etc/environment:/etc/environment-vm:ro'
+        environment:
+            NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
+            NFQ_INIT_SCRIPT: src/seedDB.sh
 
-  linker:
-    image: nfqlt/linker18ce
-    volumes:
-      - '/run/docker.sock:/run/docker.sock'
+    linker:
+        image: nfqlt/linker18ce
+        volumes:
+            - '/run/docker.sock:/run/docker.sock'
 
 volumes: {  }
 
 networks:
-  default:
-    ipam:
-      config:
-        -
-          subnet: 10.24.1.17/28
+    default:
+        ipam:
+            config:
+                -   subnet: 10.24.1.17/28
