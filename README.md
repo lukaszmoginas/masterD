@@ -44,4 +44,3 @@ WHERE
 >If the table is empty, create the extension:
 >
 >CREATE EXTENSION pg_stat_statements;
-
