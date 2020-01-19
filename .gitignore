@@ -1,2 +1,4 @@
 /.vagrant/
 /.idea/
+
+!/postgresql/src/data/.gitkeep

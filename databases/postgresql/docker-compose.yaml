@@ -29,7 +29,21 @@ services:
         ports:
             - '10.24.1.17:5432:5432'
         volumes:
-            - /var/lib/mysql
+            - /var/lib/postgresql/data
+        command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+        environment:
+            POSTGRES_USER: postgres
+
+    pgadmin:
+        environment:
+            - "POSTGRES_USER=postgres"
+            - "PGADMIN_DEFAULT_EMAIL=admin@admin.com"
+            - "PGADMIN_DEFAULT_PASSWORD=pgpasswd"
+        ports:
+            - '10.24.1.17:5050:80'
+        image: dpage/pgadmin4
+        depends_on:
+            - postgres
 
     https-dev:
         image: nfqlt/https-dev
@@ -48,11 +62,10 @@ services:
             - './src:/home/project/src'
             - '/home/project/.ssh:/home/project/.ssh'
             - '/etc/ssh:/etc/ssh'
-            - '/etc/gitconfig:/etc/gitconfig'
             - '/etc/environment:/etc/environment-vm:ro'
         environment:
             NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
-            NFQ_INIT_SCRIPT: src/seedDB.sh
+            NFQ_INIT_SCRIPT: seedDB.sh
 
     linker:
         image: nfqlt/linker18ce
