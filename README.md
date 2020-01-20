@@ -12,8 +12,8 @@
   >
   > p: project
 * > cd src/
-* > sudo chmod +x seedDB.sh
-* > ./seedDB.sh
+* > sudo chmod +x develop_init.sh
+* > ./develop_init.sh
   >
   >It will add seed you DB with fake data
 

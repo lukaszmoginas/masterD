@@ -1,0 +1,20 @@
+{
+  "name": "masterd/notifier",
+  "description": "",
+  "type": "php",
+  "require": {
+    "php": "^7.2"
+  },
+  "authors": [
+    {
+      "name": "Zmoginas",
+      "email": "zmoginas@example.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "Vendor\\Namespace\\": ""
+    }
+  }
+}
