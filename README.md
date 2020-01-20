@@ -29,7 +29,7 @@ From host PC (1):
 >  1 - (required postgresql client) ```sudo apt-get install postgresql-client```
 
 
-###NOTES:
+### NOTES:
 
 > Connect to DBMS and create extension in database; 
 >
