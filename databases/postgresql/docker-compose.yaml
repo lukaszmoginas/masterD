@@ -10,7 +10,6 @@ services:
         volumes:
             - './src:/home/project/src'
         environment:
-            APACHE_DOCUMENTROOT: /home/project/src/public
             NFQ_PROJECT_ROOT: /home/project/src
             NFQ_ENABLE_APACHE_MODULES: rewrite
 
@@ -34,16 +33,18 @@ services:
         environment:
             POSTGRES_USER: postgres
 
-    pgadmin:
-        environment:
-            - "POSTGRES_USER=postgres"
-            - "PGADMIN_DEFAULT_EMAIL=admin@admin.com"
-            - "PGADMIN_DEFAULT_PASSWORD=pgpasswd"
-        ports:
-            - '10.24.1.17:5050:80'
-        image: dpage/pgadmin4
-        depends_on:
-            - postgres
+### uncomment if it's required ###
+#    pgadmin:
+#        environment:
+#            - "POSTGRES_USER=postgres"
+#            - "PGADMIN_DEFAULT_EMAIL=admin@admin.com"
+#            - "PGADMIN_DEFAULT_PASSWORD=pgpasswd"
+#        ports:
+#            - '10.24.1.17:5050:80'
+#        image: dpage/pgadmin4
+#        depends_on:
+#            - postgres
+###
 
     https-dev:
         image: nfqlt/https-dev
@@ -65,7 +66,8 @@ services:
             - '/etc/environment:/etc/environment-vm:ro'
         environment:
             NFQ_ENABLE_PHP_MODULES: 'url json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
-            NFQ_INIT_SCRIPT: seedDB.sh
+            NFQ_PROJECT_ROOT: /home/project/src
+            NFQ_INIT_SCRIPT: tools/seedDB.sh
 
     linker:
         image: nfqlt/linker18ce
