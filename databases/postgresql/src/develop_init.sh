@@ -41,12 +41,19 @@ else
 fi
 ###
 
+### install required files with composer ###
+echo Executing composer install...
+cd /home/project/src/main
+composer install --no-interaction
+echo Done
+###
+
 ### create trigger ###
-echo Starting Cronjob...
-sudo /etc/init.d/cron start
+#echo Starting Cronjob...
+#sudo /etc/init.d/cron start //uncomment when it will be needed.
 
-echo Add executable to cronjob...
-(crontab -l 2>/dev/null; echo "* * * * * php /home/project/src/main/index.php"; echo "") | crontab -
-
-echo Executables was added to cronjob.
+#echo Add executable to cronjob...
+#(crontab -l 2>/dev/null; echo "* * * * * php /home/project/src/main/index.php"; echo "* * * * * /bin/date >> /tmp/cron_output"; echo "") | crontab -
+#
+#echo Executables was added to cronjob.
 ###
