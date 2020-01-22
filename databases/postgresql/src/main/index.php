@@ -8,13 +8,14 @@ use Service\PDONotifications;
 require __DIR__ . '/vendor/autoload.php';
 
 /** @var PDO $db */
-$db = new PDONotifications(
+$db = (new PDONotifications(
     getenv('DB_USERNAME'),
     getenv('DB_PASSWORD'),
     getenv('DB_NAME'),
     getenv('DB_PORT'),
     getenv('DB_HOST')
-);
+))->connect();
+
 
 $db->exec('LISTEN "honey"');
 
