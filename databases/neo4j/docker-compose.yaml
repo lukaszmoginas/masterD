@@ -17,14 +17,14 @@ services:
     fastcgi:
         image: nfqlt/php72-fpm
         links:
-            - postgres
+            - neo4j
         volumes:
             - './src:/home/project/src'
         environment:
             NFQ_PROJECT_ROOT: /home/project/src
             NFQ_ENABLE_PHP_MODULES: 'curl json pdo gd mcrypt ctype tokenizer simplexml intl opcache soap mbstring xml zip dom xmlwriter xmlreader iconv posix tidy fileinfo ftp exif bcmath xdebug sqlite3 pdo_sqlite mailparse'
 
-    postgres:
+    neo4j:
         image: neo4j
         ports:
             - '10.24.2.17:7474:7687'
@@ -41,7 +41,7 @@ services:
         ports:
             - '10.24.2.17:22:22'
         links:
-            - postgres
+            - neo4j
         volumes:
             - './src:/home/project/src'
             - '/home/project/.ssh:/home/project/.ssh'
