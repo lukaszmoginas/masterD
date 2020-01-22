@@ -19,7 +19,7 @@ $db = new PDONotifications(
 $db->exec('LISTEN "honey"');
 
 while (true) {
-    while ($notificationResult = $db->pgsqlGetNotify(PDO::FETCH_ASSOC, 0)) {
+    while (false !== $notificationResult = $db->pgsqlGetNotify(PDO::FETCH_ASSOC, 0)) {
         $result = json_encode($notificationResult) . PHP_EOL;
 
         (new Mailer())->sendNotification($result);
