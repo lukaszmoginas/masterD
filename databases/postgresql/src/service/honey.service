@@ -1,0 +1,14 @@
+[Unit]
+Description=Honey Token service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=honey
+ExecStart=/usr/bin/env php /home/project/src/main/index.php
+
+[Install]
+WantedBy=multi-user.target

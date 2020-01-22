@@ -2,29 +2,26 @@
 
 declare(strict_types=1);
 
+use Client\Mailer;
+use Service\PDONotifications;
+
 require __DIR__ . '/vendor/autoload.php';
 
-// Create the Transport
-$transport = (new Swift_SmtpTransport(getenv('MAIL_HOST'), 587, 'tls'))
-    ->setUsername(getenv('MAIL_USERNAME'))
-    ->setPassword(getenv('MAIL_PASSWORD'))
-;
+/** @var PDO $db */
+$db = new PDONotifications(
+    getenv('DB_USERNAME'),
+    getenv('DB_PASSWORD'),
+    getenv('DB_NAME'),
+    getenv('DB_PORT'),
+    getenv('DB_HOST')
+);
 
-// Create the Mailer using your created Transport
-$mailer = new Swift_Mailer($transport);
+$db->exec('LISTEN "honey"');
 
-//Should represent container name;
-$container = 'Postgres';
+while (true) {
+    while ($notificationResult = $db->pgsqlGetNotify(PDO::FETCH_ASSOC, 0)) {
+        $result = json_encode($notificationResult) . PHP_EOL;
 
-//Should mail body
-$body = 'Warning! HoneyToken was triggered in ' . $container . ' DBMDS';
-
-// Create a message
-$message = (new Swift_Message('Warning!'))
-    ->setFrom(['example@example.com'])
-    ->setTo(['example@example.com'])
-    ->setBody($body)
-;
-
-// Send the message
-$result = $mailer->send($message);
+        (new Mailer())->sendNotification($result);
+    }
+}
